@@ -59,7 +59,7 @@ for(const auto &thing : valid_things) {
 }
 ```
 
-The partly upside-down description of the first expression is, "generate a new value that represents a filtering of things.  The filtering is defined as things with a valid property."  The second expression is, "for each valid thing, do something."
+The partly upside-down description of the first expression is, "generate a new value `valid_things` that represents a filtering of things.  The filtering is defined as things with a valid property."  The second expression is, "for each valid thing, do something."
 
 This might initially seem more complex due to lambda syntax, but the benefits are substantial:
 
