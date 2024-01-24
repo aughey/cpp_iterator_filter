@@ -80,4 +80,4 @@ void do_something_with_things() {
 }
 ```
 
-In this example, the lambda expression is encapsulated outside the business logic, improving testability, reusability, and readability in `do_something_with_things()`.
+In this example, the lambda expression is encapsulated outside the business logic, improving testability, reusability, and readability in `do_something_with_things()`.  In this final version, the business logic is entirely self-documenting because the code reads like the narrative sentence that describes it: "for each valid thing, do something."
