@@ -60,7 +60,7 @@ This might initially seem more complex due to lambda syntax, but the benefits ar
 - **Testability**: Filtering logic can be independently tested from iteration and operation.
 - **Clarity**: The loop makes it evident that an operation is performed on each valid item without needing to parse conditional statements.
 
-### Addressing Repetition
+### Addressing Repetition/Reusability
 
 To handle repetitive operations on collections, convenience functions can be created:
 
