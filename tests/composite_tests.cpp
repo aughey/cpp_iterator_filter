@@ -59,7 +59,7 @@ TEST(CompositeTests, DoubleWithLambdas)
 // auto return type
 static std::vector<int> s_list;
 
-auto filtered_list()
+static auto filtered_list()
 {
     return lib::filter(s_list, [](const int &value)
                        { return value % 2 == 1; });
@@ -82,6 +82,49 @@ TEST(CompositeTests, TypeChanging)
     for (const auto &value : doubled_values)
     {
         actual.push_back(value);
+    }
+
+    ASSERT_EQ(expected, actual);
+}
+
+TEST(CompositeTests, AutoReturn) {
+    s_list = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    std::vector<int> expected = {1, 3, 5, 7, 9};
+    std::vector<int> actual;
+
+    auto odd_values = filtered_list();
+
+    for (const auto &value : odd_values)
+    {
+        actual.push_back(value);
+    }
+
+    ASSERT_EQ(expected, actual);
+}
+
+class Thing {
+    public:
+    Thing(std::string name, int index) : name(name), index(index) {}
+    std::string name;
+    int index;
+};
+
+TEST(CompositeTests, ComplexType) {
+    std::vector<Thing> things = {Thing("one", 1), Thing("two", 2), Thing("three", 3), Thing("four", 4), Thing("five", 5)};
+
+    auto things_with_letter_e_in_name = lib::filter(things, [](const Thing &thing) {
+        return thing.name.find("e") != std::string::npos;
+    });
+
+    auto names = lib::map(things_with_letter_e_in_name, std::function<std::string(const Thing &)>([](const Thing &thing) {
+        return thing.name;
+    }));
+
+    std::vector<std::string> expected = {"one", "three", "five"};
+    std::vector<std::string> actual;
+
+    for(const auto &name : names) {
+        actual.push_back(name);
     }
 
     ASSERT_EQ(expected, actual);
