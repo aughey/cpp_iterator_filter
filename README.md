@@ -19,6 +19,10 @@ The following example demonstrates how to use the library. It filters odd values
     // Map values by doubling them
     auto doubled_values = lib::map(odd_values, [](const int &value) { return value * 2; });
 
+    // At this point, nothing has been computed yet.  The filtering and mapping has been
+    // declared, but not yet executed.  The actual computation happens when the values are
+    // requested.
+
     for (const auto &value : doubled_values) {
         actual.push_back(value);
     }
