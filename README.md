@@ -44,6 +44,8 @@ for(int i = 0; i < MAX_THINGS; ++i) {
 }
 ```
 
+The problem with this is that you have to read the entire block to understand what it does.  The compact narriative sentence that describes the operation above is, "For each valid thing, do something." However, the code doesn't read like that. Instead, it reads like, "for all possible indicies, get the thing in the array at that index, and if it's valid, do something." The code is more complex than the operation it performs, which is a problem.
+
 I recommend a different approach, adhering strictly to the single-responsibility principle:
 
 ```cpp
@@ -52,6 +54,8 @@ for(const auto &thing : valid_things) {
     thing.do_something();
 }
 ```
+
+The partly upside-down description of the first operation is, "generate a new value that represents a filtering of things.  The filtering is defined as things with a valid property."  The second operation is, "for each valid thing, do something."
 
 This might initially seem more complex due to lambda syntax, but the benefits are substantial:
 
