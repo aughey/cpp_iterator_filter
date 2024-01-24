@@ -21,36 +21,24 @@ private:
     std::string name_;
 };
 
-class BunchesOfThingsLogic2
+class BunchesOfThingsLogic3
 {
 public:
     void do_something_with_all_things()
     {
-        for (auto &thing : all_things())
-        {
-            thing.some_operation();
-        }
+        execute_operation(all_things(), &Thing::some_operation);
     }
     void do_something_else_with_all_things()
     {
-        for (auto &thing : all_things())
-        {
-            thing.another_operation();
-        }
+        execute_operation(all_things(), &Thing::another_operation);
     }
     void do_something_with_odd_things()
     {
-        for (auto &thing : odd_things())
-        {
-            thing.some_operation();
-        }
+        execute_operation(odd_things(), &Thing::some_operation);
     }
     void do_something_with_odd_things_named_bob()
     {
-        for (auto &thing : odd_things_named_bob())
-        {
-            thing.another_operation();
-        }
+        execute_operation(odd_things_named_bob(), &Thing::some_operation);
     }
     void add_thing(const Thing &thing)
     {
@@ -58,6 +46,14 @@ public:
     }
 
 private:
+    template <typename T>
+    void execute_operation(T collection, void (Thing::*operation)()) {
+        for (auto &thing : collection)
+        {
+            (thing.*operation)();
+        }
+    }
+
     typedef lib::RefToContainer<std::vector<Thing>> ThingsRef;
     ThingsRef all_things()
     {
@@ -126,9 +122,65 @@ private:
     std::vector<Thing> things_;
 };
 
+
+class BunchesOfThingsLogic2
+{
+public:
+    void do_something_with_all_things()
+    {
+        for (auto &thing : all_things())
+        {
+            thing.some_operation();
+        }
+    }
+    void do_something_else_with_all_things()
+    {
+        for (auto &thing : all_things())
+        {
+            thing.another_operation();
+        }
+    }
+    void do_something_with_odd_things()
+    {
+        for (auto &thing : odd_things())
+        {
+            thing.some_operation();
+        }
+    }
+    void do_something_with_odd_things_named_bob()
+    {
+        for (auto &thing : odd_things_named_bob())
+        {
+            thing.some_operation();
+        }
+    }
+    void add_thing(const Thing &thing)
+    {
+        things_.push_back(thing);
+    }
+
+private:
+    typedef lib::RefToContainer<std::vector<Thing>> ThingsRef;
+    ThingsRef all_things()
+    {
+        return lib::ref(things_);
+    }
+    lib::FilterValues<ThingsRef> odd_things()
+    {
+        return lib::filter(all_things(), [](const Thing &thing)
+                           { return thing.value() % 2 == 1; });
+    }
+    lib::FilterValues<lib::FilterValues<ThingsRef>> odd_things_named_bob()
+    {
+        return lib::filter(odd_things(), [](const Thing &thing)
+                           { return thing.name() == "Bob" || thing.name() == "bob"; });
+    }
+    std::vector<Thing> things_;
+};
+
 int main(int, char *[])
 {
-    BunchesOfThingsLogic2 logic;
+    BunchesOfThingsLogic3 logic;
     logic.add_thing(Thing(1, "bob"));
     logic.add_thing(Thing(2, "Bob"));
     logic.add_thing(Thing(3, "Bob"));
