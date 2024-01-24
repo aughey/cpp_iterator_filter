@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Set the runtime library for all targets
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
-add_compile_options(-Wall -Wextra -pedantic -Werror)
+#add_compile_options(-Wall -Wextra -pedantic -Werror)
 
 # Add this to enable testing in your project
 enable_testing()

@@ -16,7 +16,7 @@ namespace lib
         {
             while (iterator_ != end_ && allow_fn_(*iterator_) == false)
             {
-                iterator_++;
+                ++iterator_;
             }
         }
 
@@ -30,11 +30,16 @@ namespace lib
             return *iterator_;
         }
 
+        typename IT::value_type &operator*()
+        {
+            return *iterator_;
+        }
+
         FilterIterator<IT> &operator++()
         {
             do
             {
-                iterator_++;
+                ++iterator_;
             } while (iterator_ != end_ && allow_fn_(*iterator_) == false);
             return *this;
         }
@@ -49,12 +54,9 @@ namespace lib
     {
     public:
         typedef FilterIterator<typename T::iterator> iterator;
-        typedef T value_type;
 
-        static FilterValues<T> create(T &container, std::function<bool(const typename T::value_type &)> allow_fn)
-        {
-            return FilterValues<T>(container, allow_fn);
-        }
+        FilterValues(T container, std::function<bool(const typename T::iterator::value_type &)> allow_fn)
+            : container_(container), allow_fn_(allow_fn) {}
 
         FilterValues<T>::iterator begin()
         {
@@ -67,19 +69,16 @@ namespace lib
         }
 
     private:
-        FilterValues(T &container, std::function<bool(const typename T::value_type &)> allow_fn)
-            : container_(container), allow_fn_(allow_fn) {}
-
-        T &container_;
-        std::function<bool(const typename T::value_type &)> allow_fn_;
+        T container_;
+        std::function<bool(const typename T::iterator::value_type &)> allow_fn_;
     };
 
     // Because c++11 doesn't deduce template arguments right, we have to create a helper function
     // to create the FilterValues object without having to specify the template arguments.
     template <typename T>
-    FilterValues<T> filter(T &container, std::function<bool(const typename T::value_type &)> allow_fn)
+    FilterValues<T> filter(T container, std::function<bool(const typename T::iterator::value_type &)> allow_fn)
     {
-        return FilterValues<T>::create(container, allow_fn);
+        return FilterValues<T>(container, allow_fn);
     }
 
     // A similar class to filter, but to map values from one type to another
@@ -119,31 +118,50 @@ namespace lib
     class MapValues
     {
     public:
-    typedef MapIterator<typename T::iterator, OUT> iterator;
-        MapValues(T &container, std::function<OUT(const IN &)> map_fn)
+        typedef MapIterator<typename T::iterator, OUT> iterator;
+        MapValues(T container, std::function<OUT(const IN &)> map_fn)
             : container_(container), map_fn_(map_fn) {}
 
-        MapValues<T,IN,OUT>::iterator begin()
+        MapValues<T, IN, OUT>::iterator begin()
         {
-            return MapIterator<typename T::iterator, OUT>(container_.begin(), container_.end(), map_fn_);
+            return MapIterator<typename T::iterator, OUT>(container_.begin(),container_.end(), map_fn_);
         }
 
-        MapValues<T,IN,OUT>::iterator end()
+        MapValues<T, IN, OUT>::iterator end()
         {
-            return MapIterator<typename T::iterator, OUT>(container_.end(), container_.end(), map_fn_);
+            return MapIterator<typename T::iterator, OUT>(container_.end(),container_.end(), map_fn_);
         }
 
     private:
-        T &container_;
+        T container_;
         std::function<OUT(const IN &)> map_fn_;
     };
 
     // Because c++11 doesn't deduce template arguments right, we have to create a helper function
     // to create the MapValues object without having to specify the template arguments.
     template <typename T, typename IN, typename OUT>
-    MapValues<T, IN, OUT> map(T &container, std::function<OUT(const IN &)> map_fn)
+    MapValues<T, IN, OUT> map(T container, std::function<OUT(const IN &)> map_fn)
     {
         return MapValues<T, IN, OUT>(container, map_fn);
     }
 
+    template <typename T>
+    class RefToContainer
+    {
+    public:
+        typedef typename T::iterator iterator;
+        RefToContainer(T &container) : container_(container) {}
+        // begin and end
+        typename T::iterator begin() { return container_.begin(); }
+        typename T::iterator end() { return container_.end(); }
+
+    private:
+        T &container_;
+    };
+
+    template <typename T>
+    RefToContainer<T> ref(T &container)
+    {
+        return RefToContainer<T>(container);
+    }
 }

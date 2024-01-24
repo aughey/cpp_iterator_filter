@@ -22,7 +22,7 @@ TEST(CompositeTests, Double)
     std::vector<int> expected = {2, 6, 10, 14, 18};
     std::vector<int> actual;
 
-    auto odd_values = lib::filter(values, odd_int);
+    auto odd_values = lib::filter(lib::ref(values), odd_int);
     auto doubled_values = lib::map(odd_values, std::function<int(const int &)>(double_int));
 
     for (const auto &value : doubled_values)

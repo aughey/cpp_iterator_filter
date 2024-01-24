@@ -13,7 +13,7 @@ TEST(MapTests, Double) {
     std::vector<int> expected = {2, 4, 6, 6, 6, 8, 8, 8, 10, 12, 14, 16, 18, 20};
     std::vector<int> actual;
 
-    auto doubled_values = lib::map<std::vector<int>,int,int>(values, double_int);
+    auto doubled_values = lib::map(lib::ref(values), std::function<int(const int&)>(double_int));
 
     for (const auto &value : doubled_values)
     {
