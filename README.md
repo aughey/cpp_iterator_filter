@@ -66,7 +66,7 @@ This might initially seem more complex due to lambda syntax, but the benefits ar
 - **Separation of Concerns**: Filtering is distinct from iteration and operation, simplifying code comprehension.
 - **Reusability**: The filtering logic can be reused without duplication.
 - **Testability**: Filtering logic can be independently tested from iteration and operation.
-- **Clarity**: The loop makes it evident that an operation is performed on each valid item without needing to parse conditional statements.
+- **Clarity**: The loop makes it evident that an operation is performed on each valid item without needing to parse inner conditional statements.
 
 ### Addressing Repetition/Reusability
 
