@@ -62,7 +62,7 @@ This might initially seem more complex due to lambda syntax, but the benefits ar
 
 ### Addressing Repetition/Reusability
 
-To handle repetitive operations on collections, convenience functions can be created:
+To handle common filtering/mapping operations on collections, convenience functions can be created:
 
 ```cpp
 lib::FilterValues<Thing> valid_things() {
