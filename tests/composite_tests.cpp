@@ -56,6 +56,15 @@ TEST(CompositeTests, DoubleWithLambdas)
     ASSERT_EQ(expected, actual);
 }
 
+// auto return type
+static std::vector<int> s_list;
+
+auto filtered_list()
+{
+    return lib::filter(s_list, [](const int &value)
+                       { return value % 2 == 1; });
+}
+
 // Simple test to check equality of two numbers
 TEST(CompositeTests, TypeChanging)
 {
