@@ -18,6 +18,10 @@ add_executable(your_project main.cpp)
 # add your_project_lib to the executaaoc_libble
 target_link_libraries(your_project PUBLIC aoc_lib)
 
+find_package(benchmark REQUIRED)
+target_link_libraries(your_project PUBLIC benchmark::benchmark)
+
+
 # Include directories
 include_directories(include)
 

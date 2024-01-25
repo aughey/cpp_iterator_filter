@@ -12,7 +12,7 @@ namespace lib
 
         FilterIterator(IT iterator, IT end,
                        std::function<bool(const typename IT::value_type &)>
-                           allow_fn) : iterator_(iterator), end_(end), allow_fn_(allow_fn)
+                           &allow_fn) : iterator_(iterator), end_(end), allow_fn_(allow_fn)
         {
             while (iterator_ != end_ && allow_fn_(*iterator_) == false)
             {
@@ -46,7 +46,7 @@ namespace lib
 
     private:
         IT iterator_, end_;
-        std::function<bool(const typename IT::value_type &)> allow_fn_;
+        std::function<bool(const typename IT::value_type &)> &allow_fn_;
     };
 
     template <typename T>
