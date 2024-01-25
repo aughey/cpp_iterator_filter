@@ -344,7 +344,7 @@ static void BM_FilterOddExternallyCached(benchmark::State &state)
         logic.filter_odd_externally_cached();
     state.SetItemsProcessed(1000000);
 }
-BENCHMARK(BM_FilterOddExternally);
+BENCHMARK(BM_FilterOddExternallyCached);
 
 static void
 BM_StringCreation(benchmark::State &state)
